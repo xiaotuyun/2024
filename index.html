@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>在线放烟花</title>
+    <title>Happy Every Day</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -112,6 +112,9 @@
                 }
                 type();
             }
+
+            // 每秒更新一次当前时间
+            setInterval(updateCurrentTime, 1000);  // 每秒更新一次时间
 
             // 页面加载时更新访问者数量
             window.onload = function () {
