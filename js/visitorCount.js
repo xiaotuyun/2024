@@ -1,32 +1,41 @@
-// 获取 Cookie 值
-function getCookie(name) {
-    let cookieArr = document.cookie.split(";");
-    for (let i = 0; i < cookieArr.length; i++) {
-        let cookie = cookieArr[i].trim();
-        if (cookie.startsWith(name + "=")) {
-            return cookie.substring(name.length + 1, cookie.length);
-        }
-    }
-    return null;
-}
-
-// 设置 Cookie 值
+// 设置 Cookie 的函数
 function setCookie(name, value, days) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // 设置过期时间为 days 天
-    let expires = "expires=" + date.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/"; // 设置 Cookie
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000)); // 设置过期时间
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
 }
 
-// 更新访问者计数
-function updateVisitorCount() {
+// 获取 Cookie 的函数
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;  // 如果没有找到对应的 Cookie
+}
+
+// 获取访问者计数
+function getVisitorCount() {
     let visitorCount = getCookie('visitorCount');
     if (!visitorCount) {
-        visitorCount = 1;  // 如果没有 cookie，设置为 1
-    } else {
-        visitorCount = parseInt(visitorCount) + 1;  // 否则计数 +1
+        visitorCount = 0;  // 如果没有计数，初始化为 0
     }
-    setCookie('visitorCount', visitorCount, 365);  // 将计数保存到 Cookie，过期时间为 1 年
+    return parseInt(visitorCount);
+}
+
+// 设置新的访问者计数
+function setVisitorCount(count) {
+    setCookie('visitorCount', count, 365);  // 设置 Cookie 并保存 365 天
+}
+
+// 更新页面显示的访问者数量
+function updateVisitorCount() {
+    let visitorCount = getVisitorCount();
+    visitorCount++;  // 每次访问时递增计数
+    setVisitorCount(visitorCount);  // 将新的计数保存到 Cookie
 
     // 更新页面中的显示
     const visitorCountElement = document.getElementById('visitor-number');
@@ -35,12 +44,7 @@ function updateVisitorCount() {
     }
 }
 
-// 初始化访问者计数
-function initializeVisitorCount() {
-    updateVisitorCount();  // 更新访问者计数
-}
-
-// 页面加载时执行
+// 页面加载时调用，更新访问者计数
 window.onload = function () {
-    initializeVisitorCount();  // 初始化访问者计数
+    updateVisitorCount();  // 更新访问者计数并显示
 };
