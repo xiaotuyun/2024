@@ -48,40 +48,6 @@
         <div id="heimen-text" style="min-height: 30px; font-size: 16px; font-family: Arial, sans-serif;"></div>
 
         <script>
-            // 获取 Cookie 的值
-            function getCookie(name) {
-                let cookieArr = document.cookie.split(";");
-                for (let i = 0; i < cookieArr.length; i++) {
-                    let cookie = cookieArr[i].trim();
-                    if (cookie.startsWith(name + "=")) {
-                        return cookie.substring(name.length + 1, cookie.length);
-                    }
-                }
-                return null;
-            }
-
-            // 设置 Cookie
-            function setCookie(name, value, days) {
-                let date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // 设置过期时间为 days 天
-                let expires = "expires=" + date.toUTCString();
-                document.cookie = name + "=" + value + ";" + expires + ";path=/";
-            }
-
-            // 更新访问者数量
-            function updateVisitorCount() {
-                let visitorCount = getCookie('visitorCount');
-                if (!visitorCount) {
-                    visitorCount = 1;
-                } else {
-                    visitorCount = parseInt(visitorCount) + 1;
-                }
-                setCookie('visitorCount', visitorCount, 365);  // Cookie 保存 1 年
-
-                const visitorCountElement = document.getElementById('visitor-number');
-                visitorCountElement.textContent = visitorCount;
-            }
-
             // 更新当前时间
             function updateCurrentTime() {
                 const currentTimeElement = document.getElementById('current-time').getElementsByTagName('span')[0];
@@ -98,6 +64,9 @@
                 currentTimeElement.textContent = formattedTime;
             }
 
+            // 每秒更新一次当前时间
+            setInterval(updateCurrentTime, 1000);
+
             // 打字机效果
             function typewriterEffect(elementId, text, speed) {
                 let i = 0;
@@ -113,33 +82,9 @@
                 type();
             }
 
-            // 每秒更新一次当前时间
-            setInterval(updateCurrentTime, 1000);  // 每秒更新一次时间
-
-            // 页面加载时更新访问者数量
-            window.onload = function () {
-                updateCurrentTime(); // 初始化时更新当前时间
-                updateVisitorCount(); // 更新访问者数量
-
-                // 打字机效果显示祝福语
-                const text = "祝各位" + new Date().getFullYear() + "快乐🎁";
-                typewriterEffect("heimen-text", text, 100);  // Speed is 100ms per character
-
-                // 自动启动烟花
-                const autoLaunchCheckbox = document.querySelector('.auto-launch');
-                if (autoLaunchCheckbox) {
-                    autoLaunchCheckbox.checked = true; // 默认勾选自动点火
-                    if (autoLaunchCheckbox.checked) {
-                        launchFireworks(); // 启动烟花的函数
-                    }
-                }
-            };
-
-            // 启动烟花的函数（示例）
-            function launchFireworks() {
-                console.log("烟花已自动启动！");
-                // 这里添加烟花的动画或者效果逻辑
-            }
+            // 创建动态文本内容
+            const text = "祝各位" + new Date().getFullYear() + "快乐🎁";
+            typewriterEffect("heimen-text", text, 100);  // Speed is 100ms per character
         </script>
     </div>
 
@@ -227,9 +172,10 @@
         <img src="images/" alt="">
     </div>
 
-    <script src='js/fscreen%401.0.1.js'></script>
-    <script src='js/Stage%400.1.4.js'></script>
-    <script src='js/MyMath.js'></script>
+    <script src="js/visitorCount.js"></script>  <!-- 引入 visitorCount.js -->
+    <script src="js/fscreen%401.0.1.js"></script>
+    <script src="js/Stage%400.1.4.js"></script>
+    <script src="js/MyMath.js"></script>
     <script src="js/script.js"></script>
 </body>
 
