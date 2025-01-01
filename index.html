@@ -85,6 +85,19 @@
             // 创建动态文本内容
             const text = "祝各位" + new Date().getFullYear() + "快乐🎁";
             typewriterEffect("heimen-text", text, 100);  // Speed is 100ms per character
+
+
+            // 页面加载时调用，获取访问者计数并显示
+            window.onload = function () {
+                // 向服务器请求访问计数
+                fetch('https://xiaotuyun.github.io/2024/js/server.js/visitorCount')
+                    .then(response => response.json())
+                    .then(data => {
+                        // 更新页面上的访问计数
+                        document.getElementById('visitorCount').textContent = data.visitorCount;
+                    })
+                    .catch(error => console.error('Error fetching visitor count:', error));
+            };
         </script>
     </div>
 
